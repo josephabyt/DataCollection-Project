@@ -43,16 +43,16 @@
       <HintPath>$(GameAssemblyPath)\Cinemachine.dll</HintPath>
     </Reference>
     <Reference Include="Fusion.Realtime">
-      <HintPath>D:\SteamLibrary\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\Fusion.Realtime.dll</HintPath>
+      <HintPath>$(GameAssemblyPath)\Fusion.Realtime.dll</HintPath>
     </Reference>
     <Reference Include="Fusion.Runtime">
-      <HintPath>D:\SteamLibrary\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\Fusion.Runtime.dll</HintPath>
+      <HintPath>$(GameAssemblyPath)\Fusion.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Fusion.Sockets">
-      <HintPath>D:\SteamLibrary\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\Fusion.Sockets.dll</HintPath>
+      <HintPath>$(GameAssemblyPath)\Fusion.Sockets.dll</HintPath>
     </Reference>
     <Reference Include="Fusion.Unity">
-      <HintPath>D:\SteamLibrary\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\Fusion.Unity.dll</HintPath>
+      <HintPath>$(GameAssemblyPath)\Fusion.Unity.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security">
       <HintPath>$(GameAssemblyPath)\Mono.Security.dll</HintPath>
@@ -109,7 +109,7 @@
       <HintPath>$(GameAssemblyPath)\Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:\SteamLibrary\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(GameAssemblyPath)\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>$(GameAssemblyPath)\Unity.Timeline.dll</HintPath>
