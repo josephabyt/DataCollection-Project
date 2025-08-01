@@ -1,3 +1,4 @@
+### currently i have logged 7,134 users info, but im keeping priv for now
 # updated so i can grab more info for my website
 # DataCollection-Project
 Project used to collect data of random Gorilla Tag users.
