@@ -1,4 +1,16 @@
 ### currently i have logged 7,134 users info, but im keeping priv for now
+## how to use:
+- build it
+- run game
+- wait
+- close game
+- check game directory for DataCollection folder
+
+use iidk stupid menu with these mods for safety:
+- invis
+- anti report disconnect
+- anti report oculus
+- anti report anti cheat
 # updated so i can grab more info for my website
 # DataCollection-Project
 Project used to collect data of random Gorilla Tag users.
