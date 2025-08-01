@@ -1,5 +1,4 @@
 # updated so i can grab more info for my website
----
 # DataCollection-Project
 Project used to collect data of random Gorilla Tag users.
 This project does not collect any personal information or identifiers of users. It only collects data related to the game Gorilla Tag, such as player movements, actions, and interactions within the game environment.
