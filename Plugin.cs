@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using DataCollection.Managers;
 using ExitGames.Client.Photon;
 using GorillaNetworking;
@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Valve.Newtonsoft.Json;
+using PlayFab;
+using PlayFab.ClientModels;
+using System;
 
 namespace DataCollection
 {
@@ -19,17 +22,17 @@ namespace DataCollection
 
         public static void ChangeName(string PlayerName)
         {
-            GorillaComputer.instance.currentName = PlayerName;
-            PhotonNetwork.LocalPlayer.NickName = PlayerName;
-            VRRig.LocalRig.playerText1.text = PlayerName;
-            VRRig.LocalRig.playerText2.text = PlayerName;
+            //GorillaComputer.instance.currentName = PlayerName;
+            //PhotonNetwork.LocalPlayer.NickName = PlayerName;
+            //VRRig.LocalRig.playerText1.text = PlayerName;
+            //VRRig.LocalRig.playerText2.text = PlayerName;
 
-            try
-            {
-                if (GorillaComputer.instance.friendJoinCollider.playerIDsCurrentlyTouching.Contains(PhotonNetwork.LocalPlayer.UserId) || CosmeticWardrobeProximityDetector.IsUserNearWardrobe(PhotonNetwork.LocalPlayer.UserId))
-                    GorillaTagger.Instance.myVRRig.SendRPC("RPC_InitializeNoobMaterial", RpcTarget.All, new object[] { VRRig.LocalRig.playerColor.r, VRRig.LocalRig.playerColor.g, VRRig.LocalRig.playerColor.b });
-            }
-            catch { }
+            //try
+            //{
+            //    if (GorillaComputer.instance.friendJoinCollider.playerIDsCurrentlyTouching.Contains(PhotonNetwork.LocalPlayer.UserId) || CosmeticWardrobeProximityDetector.IsUserNearWardrobe(PhotonNetwork.LocalPlayer.UserId))
+            //        GorillaTagger.Instance.myVRRig.SendRPC("RPC_InitializeNoobMaterial", RpcTarget.All, new object[] { VRRig.LocalRig.playerColor.r, VRRig.LocalRig.playerColor.g, VRRig.LocalRig.playerColor.b });
+            //}
+            //catch { }
         }
 
         void Awake()
@@ -42,7 +45,7 @@ namespace DataCollection
 
         int nameIndex;
         float nameDelay;
-        string nameCycle = "I AM A DATA COLLECTION BOT COLLECTING IMAGES VOCALS AND INFORMATION ABOUT YOU";
+        readonly string nameCycle = "I AM A DATA COLLECTION BOT COLLECTING IMAGES VOCALS AND INFORMATION ABOUT YOU";
 
         float roomJoinTime;
         float joinAttemptDelay;
@@ -72,8 +75,8 @@ namespace DataCollection
                     {
                         joinAttemptDelay = Time.time + 5f;
 
-                        GorillaComputer.instance.currentQueue = Random.Range(0f, 1f) > 0.5f ? "COMPETITIVE" : "DEFAULT";
-                        GorillaComputer.instance.currentGameMode.Value = Random.Range(0f, 1f) > 0.5f ? "Infection" : "Casual";
+                        GorillaComputer.instance.currentQueue = UnityEngine.Random.Range(0f, 1f) > 0.5f ? "COMPETITIVE" : "DEFAULT";
+                        GorillaComputer.instance.currentGameMode.Value = UnityEngine.Random.Range(0f, 1f) > 0.5f ? "Infection" : "Casual";
 
                         GameObject[] triggerZones = new GameObject[]
                         {
@@ -81,14 +84,14 @@ namespace DataCollection
                             GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - City Front")
                         };
 
-                        triggerZones[Random.Range(0, triggerZones.Length)].GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
+                        triggerZones[UnityEngine.Random.Range(0, triggerZones.Length)].GetComponent<GorillaNetworkJoinTrigger>().OnBoxTriggered();
                     }
                 }
                 else
                 {
                     if (roomJoinTime < 0f)
                         roomJoinTime = Time.time;
-                    else if (Time.time > roomJoinTime + Random.Range(30f, 60f) || PhotonNetwork.PlayerList.Length <= 1)
+                    else if (Time.time > roomJoinTime + UnityEngine.Random.Range(30f, 60f) || PhotonNetwork.PlayerList.Length <= 1)
                         NetworkSystem.Instance.ReturnToSinglePlayer();
                 }
             }
@@ -138,7 +141,7 @@ namespace DataCollection
                 string filePath = "DataCollection/" + target.UserId + "/photo.png";
                 File.WriteAllBytes(filePath, bytes);
 
-                Debug.Log("Picture saved :: " + target.UserId);
+                //Debug.Log("Picture saved :: " + target.UserId);
 
                 cam.targetTexture = null;
                 RenderTexture.active = null;
@@ -182,6 +185,15 @@ namespace DataCollection
 
         public void OnPlayerJoined(NetPlayer player)
         {
+            PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest { PlayFabId = player.UserId }, delegate (GetAccountInfoResult result)
+                        {
+                            string date = result.AccountInfo.Created.ToString("MMMM dd, yyyy h:mm tt");
+                            OnPlayerJoined1(player, date);
+                        }, delegate { OnPlayerJoined1(player, "Unknown"); }, null, null);
+        }
+
+        public void OnPlayerJoined1(NetPlayer player, string date)
+        {
             Player player1 = player.GetPlayerRef();
 
             string folderPath = Path.Combine("DataCollection", player.UserId);
@@ -192,7 +204,7 @@ namespace DataCollection
             VRRig rig = GorillaGameManager.instance.FindPlayerVRRig(player);
             if (rig == null)
             {
-                Debug.LogWarning("VRRig not found for player: " + player.UserId);
+                //Debug.LogWarning("VRRig not found for player: " + player.UserId);
                 return;
             }
 
@@ -202,6 +214,7 @@ namespace DataCollection
                 nickname = player.NickName,
                 cosmetics = rig.concatStringOfCosmeticsAllowed,
                 equipped = rig.cosmeticSet.ToDisplayNameArray().Join(""),
+                starttime = date ?? "Unknown",
                 color = new
                 {
                     r = rig.playerColor.r,
@@ -209,8 +222,15 @@ namespace DataCollection
                     b = rig.playerColor.b
                 },
                 platform = IsPlayerSteam(player) ? "STEAM" : "OCULUS",
+                loggedinsideof = PhotonNetwork.InRoom ? PhotonNetwork.CurrentRoom.Name : "SINGLEPLAYER",
+                loggedat = DateTime.Now.ToString("MMMM dd, yyyy h:mm tt"),
                 properties = PropsToDictionary(player),
             };
+
+            if (!File.Exists(jsonPath))
+                Debug.Log("[LOGR] New player logged!");
+            else
+                Debug.Log("<LOGR> Already logged!");
 
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(data, Formatting.Indented));
 
