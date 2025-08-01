@@ -1,4 +1,4 @@
-### currently i have logged 7,134 users info, but im keeping priv for now
+### currently i have logged 7,581 users info, but im keeping priv for now
 ## how to use:
 - build it
 - run game
