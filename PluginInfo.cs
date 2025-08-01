@@ -7,6 +7,6 @@
     {
         public const string GUID = "com.goldentrophy.gorillatag.datacollection";
         public const string Name = "DataCollection";
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
     }
 }
