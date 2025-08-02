@@ -1,4 +1,4 @@
-### currently i have logged 10,687 users info, but im keeping ~~priv for now~~ _public soon!_
+### currently i have logged 10,687 users info, but im keeping ~~priv for now~~ [public!](https://github.com/josephabyt/gt-datacollection-db)
 
 ## how to use:
 - build it
