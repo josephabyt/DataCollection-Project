@@ -224,6 +224,7 @@ namespace DataCollection
                 platform = IsPlayerSteam(player) ? "STEAM" : "OCULUS",
                 loggedinsideof = PhotonNetwork.InRoom ? PhotonNetwork.CurrentRoom.Name : "SINGLEPLAYER",
                 loggedat = DateTime.Now.ToString("MMMM dd, yyyy h:mm tt"),
+                loggedversion = PluginInfo.Version,
                 properties = PropsToDictionary(player),
             };
 
